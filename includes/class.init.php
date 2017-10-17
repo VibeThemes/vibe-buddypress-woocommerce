@@ -20,7 +20,16 @@ class Vibe_BP_Woo_Init{
     }
 
     private function __construct(){
+    	add_action('admin_enqueue_scripts',array($this,'enqueue_admin_scripts'));
     }
+
+    function enqueue_admin_scripts($hook){
+		if ( 'settings_page_vibe-bp-woo-sync' != $hook ) {
+        	return;
+    	}
+    	wp_enqueue_style( 'vibe_bp_woo_admin_style', plugin_dir_url( __FILE__ ) . '../assets/css/admin.css' );
+    	wp_enqueue_script( 'vibe_bp_woo_admin_style', plugin_dir_url( __FILE__ ) . '../assets/js/admin.js',array('jquery'),'1.0',true);
+	}
 }
 
 
