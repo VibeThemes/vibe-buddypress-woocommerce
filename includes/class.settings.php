@@ -19,48 +19,30 @@ class Vibe_BP_Woo_Settings{
         return self::$instance;
     }
 
-    private function __construct(){
-    	add_options_page(__('Vibe Bp Woo Sync settings','vbc'),__('BVibe Bp Woo Sync','vbc'),'manage_options','vbc',array($this,'settings'));
-		
+    public function __construct(){
+    	add_action('admin_menu',array($this,'add_vibe_buddypress_woocommerce_option'));
     }
 
-    function settings(){
-    	echo '<h3>'.__('Google Social Connect Settings','bp-social-connect').'</h3>';
+    function add_vibe_buddypress_woocommerce_option(){
+    	add_options_page(__('Vibe Bp Woo Sync settings','vbc'),__('Vibe Bp Woo Sync','vbc'),'manage_options','vibe-bp-woo-sync',array($this,'add_settings'));
+    }
+
+    function add_settings(){
+    	echo '<h3>'.__('Vibe Buddypress Woocommerce Settings','vbc').'</h3>';
 		$settings = array(
+				
 				array(
-					'label' => __('Enable Google Login','vibe-customtypes'),
-					'name' =>'google',
-					'type' => 'select',
-					'options'=>array(
-						'0' => __('No','bp-social-connect'),
-						'1' => __('Yes','bp-social-connect'),
-					),
-					'desc' => ''
-				),
-				array(
-					'label' => __('Client ID','vibe-customtypes'),
-					'name' => 'google_client_id',
-					'type' => 'text',
-					'desc' => sprintf(__('Set your Google client id, create a new project for web and grab the client id from %s','vibe-customtypes'),'<a href="https://console.developers.google.com">https://console.developers.google.com</a>'),
-				),
-				array(
-					'label' => __('Client Secret','vibe-customtypes'),
-					'name' => 'google_client_secret',
-					'type' => 'text',
-					'desc' => __('Enter Google client secret','vibe-customtypes')
-				),
-				array(
-					'label' => __('Client Uri','vibe-customtypes'),
-					'name' => 'google_redirect_uri',
-					'type' => 'text',
-					'desc' => __('Enter redirect uri','vibe-customtypes')
+					'label' => __('Map Fields','vbc'),
+					'name' => 'bp_woo_fields_map',
+					'type' => 'bp_woo_map',
+					'desc' => __('Map WooCommerce and BuddyPress fields','vbc')
 				),
 			);
-		$settings = apply_filters('bp_social_connect_google_fields',$settings);
-		$this->generate_form('google',$settings);
+		$settings = apply_filters('vibe_bp_woo_sync_fields',$settings);
+		$this->generate_form($settings);
     }
 
-    function generate_form($tab,$settings=array()){
+    function generate_form( $settings=array() ){
 		echo '<form method="post">
 				<table class="form-table">';
 		wp_nonce_field('save_settings','_wpnonce');   
@@ -97,20 +79,26 @@ class Vibe_BP_Woo_Settings{
 				case 'hidden':
 					echo '<input type="hidden" name="'.$setting['name'].'" value="1"/>';
 				break;
-				case 'bp_fields':
+				case 'bp_woo_map':
 					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><a class="add_new_map button">'.__('Add BuddyPress profile field map','bp-social-connect').'</a>';
+					echo '<td class="forminp"><a class="add_new_map button">'.__('Add BuddyPress profile field map with WooCommerce profile fields','vbc').'</a>';
 
 					global $bp,$wpdb;;
 					$table =  $bp->profile->table_name_fields;
 					$bp_fields = $wpdb->get_results("SELECT DISTINCT name FROM {$table}");
+					$woo_checkout =  new WC_Checkout();
+					print_r('####1');
+					print_r($woo_checkout);
+					$woo_fields = $woo_checkout->get_checkout_fields();
+					print_r($woo_fields);
+					$woo_fields = $woo_fields['account'];
+					echo '<ul class="woo_bp_fields">';
 
-					echo '<ul class="bp_fields">';
 					if(is_array($this->settings[$setting['name']]['field']) && count($this->settings[$setting['name']]['field'])){
 						foreach($this->settings[$setting['name']]['field'] as $key => $field){
-							echo '<li><label><select name="'.$setting['name'].'[field][]">';
-							foreach($setting['fields'] as $k=>$v){
-								echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$k.'</option>';
+							echo '<li><label><select name="'.$setting['name'].'[woofield][]">';
+							foreach($woo_fields as $k=>$v){
+								echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v['label'].'</option>';
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
 							foreach($bp_fields as $f){
@@ -120,9 +108,9 @@ class Vibe_BP_Woo_Settings{
 						}
 					}
 					echo '<li class="hide">';
-					echo '<label><select rel-name="'.$setting['name'].'[field][]">';
-					foreach($setting['fields'] as $k=>$v){
-						echo '<option value="'.$k.'">'.$k.'</option>';
+					echo '<label><select rel-name="'.$setting['name'].'[woofield][]">';
+					foreach($woo_fields as $k=>$v){
+						echo '<option value="'.$k.'">'.$v['label'].'</option>';
 					}
 					echo '</select></label>';
 					echo '<select rel-name="'.$setting['name'].'[bpfield][]">';
@@ -145,26 +133,9 @@ class Vibe_BP_Woo_Settings{
 		}
 		echo '</tbody>
 		</table>';
-		echo '<input type="submit" name="save" value="'.__('Save Settings','bp-social-connect').'" class="button button-primary" /></form>';
+		echo '<input type="submit" name="save_settings" value="'.__('Save Settings','vbc').'" class="button button-primary" /></form>';
 	}
 
-
-	function save(){
-		$none = $_POST['save_settings'];
-		if ( !isset($_POST['save']) || !isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'],'save_settings') ){
-		    _e('Security check Failed. Contact Administrator.','bp-social-connect');
-		    die();
-		}
-		unset($_POST['_wpnonce']);
-		unset($_POST['_wp_http_referer']);
-		unset($_POST['save']);
-
-		foreach($_POST as $key => $value){
-			$this->settings[$key]=$value;
-		}
-
-		$this->put($this->settings);
-	}
 }
 
 
