@@ -20,7 +20,16 @@ class Vibe_BP_Woo_Settings{
     }
 
     public function __construct(){
+    	$this->settings = $this->get();
     	add_action('admin_menu',array($this,'add_vibe_buddypress_woocommerce_option'));
+    }
+
+    function get(){
+    	return get_option('vibe_bp_woo_sync_settings');
+    }
+
+    function put($value){
+    	update_option('vibe_bp_woo_sync_settings',$value);
     }
 
     function add_vibe_buddypress_woocommerce_option(){
@@ -39,10 +48,14 @@ class Vibe_BP_Woo_Settings{
 				),
 			);
 		$settings = apply_filters('vibe_bp_woo_sync_fields',$settings);
+		if( isset($_POST['save_settings']) ){
+			$this->save_form_fields();
+		}
 		$this->generate_form($settings);
     }
 
     function generate_form( $settings=array() ){
+    	print_r($this->settings);
 		echo '<form method="post">
 				<table class="form-table">';
 		wp_nonce_field('save_settings','_wpnonce');   
@@ -86,19 +99,28 @@ class Vibe_BP_Woo_Settings{
 					global $bp,$wpdb;;
 					$table =  $bp->profile->table_name_fields;
 					$bp_fields = $wpdb->get_results("SELECT DISTINCT name FROM {$table}");
-					$woo_checkout =  new WC_Checkout();
-					print_r('####1');
-					print_r($woo_checkout);
-					$woo_fields = $woo_checkout->get_checkout_fields();
-					print_r($woo_fields);
-					$woo_fields = $woo_fields['account'];
+
+					
+					$woo_fields = array(
+						'first_name' => __('First Name','vbc'),
+						'last_name' => __('Last Name','vbc'),
+						'country' => __('Country','vbc'),
+						'address' => __('Address','vbc'),
+						'city' => __('Town / City','vbc'),
+						'state' => __('State / Country','vbc'),
+						'zip' => __('Postcode / Zip','vbc'),
+						'phone' => __('Phone','vbc'),
+						'email' => __('Email address','vbc'),
+
+						);
+
 					echo '<ul class="woo_bp_fields">';
 
 					if(is_array($this->settings[$setting['name']]['field']) && count($this->settings[$setting['name']]['field'])){
 						foreach($this->settings[$setting['name']]['field'] as $key => $field){
 							echo '<li><label><select name="'.$setting['name'].'[woofield][]">';
 							foreach($woo_fields as $k=>$v){
-								echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v['label'].'</option>';
+								echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v.'</option>';
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
 							foreach($bp_fields as $f){
@@ -110,7 +132,7 @@ class Vibe_BP_Woo_Settings{
 					echo '<li class="hide">';
 					echo '<label><select rel-name="'.$setting['name'].'[woofield][]">';
 					foreach($woo_fields as $k=>$v){
-						echo '<option value="'.$k.'">'.$v['label'].'</option>';
+						echo '<option value="'.$k.'">'.$v.'</option>';
 					}
 					echo '</select></label>';
 					echo '<select rel-name="'.$setting['name'].'[bpfield][]">';
@@ -134,6 +156,22 @@ class Vibe_BP_Woo_Settings{
 		echo '</tbody>
 		</table>';
 		echo '<input type="submit" name="save_settings" value="'.__('Save Settings','vbc').'" class="button button-primary" /></form>';
+	}
+
+	function save_form_fields(){
+
+		if ( !isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'],'save_settings') ){
+		    _e('Security check Failed. Contact Administrator.','vbc');
+		    die();
+		}
+		unset($_POST['_wpnonce']);
+		unset($_POST['_wp_http_referer']);
+		unset($_POST['save_settings']);
+		foreach($_POST as $key => $value){
+			$this->settings[$key]=$value;
+		}
+
+		$this->put($this->settings);
 	}
 
 }
