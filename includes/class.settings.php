@@ -20,16 +20,7 @@ class Vibe_BP_Woo_Settings{
     }
 
     public function __construct(){
-    	$this->settings = $this->get();
     	add_action('admin_menu',array($this,'add_vibe_buddypress_woocommerce_option'));
-    }
-
-    function get(){
-    	return get_option('vibe_bp_woo_sync_settings');
-    }
-
-    function put($value){
-    	update_option('vibe_bp_woo_sync_settings',$value);
     }
 
     function add_vibe_buddypress_woocommerce_option(){
@@ -55,7 +46,8 @@ class Vibe_BP_Woo_Settings{
     }
 
     function generate_form( $settings=array() ){
-    	print_r($this->settings);
+
+    	$woo_bp_sync_settings = get_option('vibe_bp_woo_sync_settings');
 		echo '<form method="post">
 				<table class="form-table">';
 		wp_nonce_field('save_settings','_wpnonce');   
@@ -63,44 +55,15 @@ class Vibe_BP_Woo_Settings{
 
 		foreach($settings as $setting ){
 			echo '<tr valign="top">';
-			global $wpdb,$bp;
 			switch($setting['type']){
-				case 'textarea': 
-					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><textarea name="'.$setting['name'].'">'.(isset($this->settings[$setting['name']])?$this->settings[$setting['name']]:(isset($setting['std'])?$setting['std']:'')).'</textarea>';
-					echo '<span>'.$setting['desc'].'</span></td>';
-				break;
-				case 'select':
-					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><select name="'.$setting['name'].'" class="chzn-select">';
-					foreach($setting['options'] as $key=>$option){
-						echo '<option value="'.$key.'" '.(isset($this->settings[$setting['name']])?selected($key,$this->settings[$setting['name']]):'').'>'.$option.'</option>';
-					}
-					echo '</select>';
-					echo '<span>'.$setting['desc'].'</span></td>';
-				break;
-				case 'checkbox':
-					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><input type="checkbox" name="'.$setting['name'].'" '.(isset($this->settings[$setting['name']])?'CHECKED':'').' />';
-					echo '<span>'.$setting['desc'].'</span></td>';
-				break;
-				case 'number':
-					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><input type="number" name="'.$setting['name'].'" value="'.(isset($this->settings[$setting['name']])?$this->settings[$setting['name']]:'').'" />';
-					echo '<span>'.$setting['desc'].'</span></td>';
-				break;
-				case 'hidden':
-					echo '<input type="hidden" name="'.$setting['name'].'" value="1"/>';
-				break;
 				case 'bp_woo_map':
 					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
 					echo '<td class="forminp"><a class="add_new_map button">'.__('Add BuddyPress profile field map with WooCommerce profile fields','vbc').'</a>';
 
-					global $bp,$wpdb;;
+					global $wpdb,$bp;
 					$table =  $bp->profile->table_name_fields;
 					$bp_fields = $wpdb->get_results("SELECT DISTINCT name FROM {$table}");
 
-					
 					$woo_fields = array(
 						'first_name' => __('First Name','vbc'),
 						'last_name' => __('Last Name','vbc'),
@@ -115,16 +78,15 @@ class Vibe_BP_Woo_Settings{
 						);
 
 					echo '<ul class="woo_bp_fields">';
-
-					if(is_array($this->settings[$setting['name']]['field']) && count($this->settings[$setting['name']]['field'])){
-						foreach($this->settings[$setting['name']]['field'] as $key => $field){
+					if( is_array($woo_bp_sync_settings[$setting['name']]) && count($woo_bp_sync_settings[$setting['name']]) ){
+						foreach($woo_bp_sync_settings[$setting['name']]['woofield'] as $key => $field){
 							echo '<li><label><select name="'.$setting['name'].'[woofield][]">';
 							foreach($woo_fields as $k=>$v){
 								echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v.'</option>';
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
 							foreach($bp_fields as $f){
-								echo '<option value="'.$f->name.'" '.(($this->settings[$setting['name']]['bpfield'][$key] == $f->name)?'selected=selected':'').'>'.$f->name.'</option>';
+								echo '<option value="'.$f->name.'" '.(($woo_bp_sync_settings[$setting['name']]['bpfield'][$key] == $f->name)?'selected=selected':'').'>'.$f->name.'</option>';
 							}
 							echo '</select><span class="dashicons dashicons-no remove_field_map"></span></li>';
 						}
@@ -144,10 +106,11 @@ class Vibe_BP_Woo_Settings{
 					echo '<span class="dashicons dashicons-no remove_field_map"></span></li>';
 					echo '</ul></td>';
 				break;
+
 				default:
-					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><input type="text" name="'.$setting['name'].'" value="'.(isset($this->settings[$setting['name']])?$this->settings[$setting['name']]:(isset($setting['std'])?$setting['std']:'')).'" />';
-					echo '<span>'.$setting['desc'].'</span></td>';
+					$default = '';
+					$default = apply_filters('vibe_woo_bp_sync_generate_form',$default,$setting,$woo_bp_sync_settings);
+					echo $default;
 				break;
 			}
 			
@@ -167,14 +130,9 @@ class Vibe_BP_Woo_Settings{
 		unset($_POST['_wpnonce']);
 		unset($_POST['_wp_http_referer']);
 		unset($_POST['save_settings']);
-		foreach($_POST as $key => $value){
-			$this->settings[$key]=$value;
-		}
-
-		$this->put($this->settings);
+		update_option('vibe_bp_woo_sync_settings',$_POST);
 	}
 
 }
-
 
 Vibe_BP_Woo_Settings::init();
