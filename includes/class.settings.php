@@ -62,7 +62,7 @@ class Vibe_BP_Woo_Settings{
 
 					global $wpdb,$bp;
 					$table =  $bp->profile->table_name_fields;
-					$bp_fields = $wpdb->get_results("SELECT DISTINCT name FROM {$table}");
+					$bp_fields = $wpdb->get_results("SELECT DISTINCT name,id FROM {$table}");
 
 					$woo_fields = array(
 						'first_name' => __('First Name','vbc'),
@@ -86,7 +86,7 @@ class Vibe_BP_Woo_Settings{
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
 							foreach($bp_fields as $f){
-								echo '<option value="'.$f->name.'" '.(($woo_bp_sync_settings[$setting['name']]['bpfield'][$key] == $f->name)?'selected=selected':'').'>'.$f->name.'</option>';
+								echo '<option value="'.$f->id.'" '.(($woo_bp_sync_settings[$setting['name']]['bpfield'][$key] == $f->id)?'selected=selected':'').'>'.$f->name.'</option>';
 							}
 							echo '</select><span class="dashicons dashicons-no remove_field_map"></span></li>';
 						}
@@ -100,7 +100,7 @@ class Vibe_BP_Woo_Settings{
 					echo '<select rel-name="'.$setting['name'].'[bpfield][]">';
 					
 					foreach($bp_fields as $f){
-						echo '<option value="'.$f->name.'">'.$f->name.'</option>';
+						echo '<option value="'.$f->id.'">'.$f->name.'</option>';
 					}
 					echo '</select>';
 					echo '<span class="dashicons dashicons-no remove_field_map"></span></li>';
