@@ -105,6 +105,7 @@ class Vibe_BP_Woo_Settings{
 							foreach($woo_fields as $k=>$v){
 								if( is_array($v) ){
 									echo '<optgroup label="'.$v['label'].'">';
+									unset($v['label']);
 									foreach ($v as $i => $j) {
 										echo '<option value="'.$i.'" '.(($field == $i)?'selected=selected':'').'>'.$j.'</option>';
 									}
@@ -125,6 +126,7 @@ class Vibe_BP_Woo_Settings{
 					foreach($woo_fields as $k=>$v){
 						if( is_array($v) ){
 							echo '<optgroup label="'.$v['label'].'">';
+							unset($v['label']);
 							foreach ($v as $i => $j) {
 								echo '<option value="'.$i.'">'.$j.'</option>';
 							}
