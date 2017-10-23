@@ -47,115 +47,123 @@ class Vibe_BP_Woo_Init{
             return;
         }
 
-        // Get the customer
-        $customer = WC_API_Customers::update_customer_data( $user_id );
-
         //Set data
-        $first_name = '';
-        $last_name = '';
-        $billing_address = array();
-        $shipping_address = array();
         $woo_bp_sync_settings = get_option('vibe_bp_woo_sync_settings');
 
         foreach ($woo_bp_sync_settings['bp_woo_fields_map']['woofield'] as $key => $value) {
             if( $value == 'first_name' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
                 $first_name = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'first_name', $first_name );
             }
             if( $value == 'last_name' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
                 $last_name = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'last_name', $first_name );
             }
             if( $value == 'billing_first_name' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['first_name'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_first_name = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_first_name', $billing_first_name );
             }
             if( $value == 'billing_last_name' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['last_name'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_last_name = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_last_name', $billing_last_name );
             }
             if( $value == 'billing_email' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['email'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_email = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_email', $billing_email );
             }
             if( $value == 'billing_company' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['company'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_company = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_company', $billing_company );
             }
             if( $value == 'billing_phone' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['phone'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_phone = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_phone', $billing_phone );
             }
             if( $value == 'billing_address_1' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['address_1'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_address_1 = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_address_1', $billing_address_1 );
             }
             if( $value == 'billing_address_2' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['address_2'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_address_2 = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_address_2', $billing_address_2 );
             }
             if( $value == 'billing_city' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['city'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_city = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_city', $billing_city );
             }
             if( $value == 'billing_postcode' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['postcode'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_postcode = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_postcode', $billing_postcode );
             }
             if( $value == 'billing_state' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['state'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_state = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_state', $billing_state );
             }
             if( $value == 'billing_country' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $billing_address['country'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $billing_country = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'billing_country', $billing_country );
             }
             if( $value == 'shipping_first_name' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['first_name'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_first_name = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_first_name', $shipping_first_name );
             }
             if( $value == 'shipping_last_name' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['last_name'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_last_name = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_last_name', $shipping_last_name );
             }
             if( $value == 'shipping_company' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['company'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_company = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_company', $shipping_company );
             }
             if( $value == 'shipping_address_1' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['address_1'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_address_1 = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_address_1', $shipping_address_1 );
             }
             if( $value == 'shipping_address_2' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['address_2'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_address_2 = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_address_2', $shipping_address_2 );
             }
             if( $value == 'shipping_city' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['city'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_city = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_city', $shipping_city );
             }
             if( $value == 'shipping_postcode' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['postcode'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_postcode = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_postcode', $shipping_postcode );
             }
             if( $value == 'shipping_state' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['state'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_state = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_state', $shipping_state );
             }
             if( $value == 'shipping_country' ){
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
-                $shipping_address['country'] = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                $shipping_country = bp_get_profile_field_data( array( 'field' => $field_id, 'user_id' => $user_id ) );
+                update_user_meta( $user_id, 'shipping_country', $shipping_country );
             }
             
         }
 
-        $data['first_name'] = $first_name;
-        $data['last_name'] = $last_name;
-        $data['billing_address'] = $billing_address;
-        $data['shipping_address'] = $shipping_address;
-
-        //Update woocommerce customer data
-        WC_API_Customers::update_customer_data( $user_id, $data, $customer );
     }
 }
 
