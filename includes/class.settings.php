@@ -20,7 +20,8 @@ class Vibe_BP_Woo_Settings{
     }
 
     public function __construct(){
-    	add_action('admin_menu',array($this,'add_vibe_buddypress_woocommerce_option'));
+
+   		add_action('admin_menu',array($this,'add_vibe_buddypress_woocommerce_option'));
     }
 
     function add_vibe_buddypress_woocommerce_option(){
@@ -76,7 +77,7 @@ class Vibe_BP_Woo_Settings{
 									'billing_address_2' => __('Address 2','vbc'),
 									'billing_city' => __('Town / City','vbc'),
 									'billing_postcode' => __('Postcode / Zip','vbc'),
-									'billing_state' => __('State / Country','vbc'),
+									'billing_state' => __('State','vbc'),
 									'billing_country' => __('Country','vbc'),
 								),
 							'shipping' => array(
@@ -88,7 +89,7 @@ class Vibe_BP_Woo_Settings{
 									'shipping_address_2' => __('Address 2','vbc'),
 									'shipping_city' => __('Town / City','vbc'),
 									'shipping_postcode' => __('Postcode / Zip','vbc'),
-									'shipping_state' => __('State / Country','vbc'),
+									'shipping_state' => __('State','vbc'),
 									'shipping_country' => __('Country','vbc'),
 								),
 						);
@@ -108,8 +109,10 @@ class Vibe_BP_Woo_Settings{
 								}
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
-							foreach($bp_fields as $f){
-								echo '<option value="'.$f->id.'" '.(($woo_bp_sync_settings[$setting['name']]['bpfield'][$key] == $f->id)?'selected=selected':'').'>'.$f->name.'</option>';
+							if( !empty($bp_fields) ){
+								foreach($bp_fields as $f){
+									echo '<option value="'.$f->id.'" '.(($woo_bp_sync_settings[$setting['name']]['bpfield'][$key] == $f->id)?'selected=selected':'').'>'.$f->name.'</option>';
+								}
 							}
 							echo '</select><span class="dashicons dashicons-no remove_field_map"></span></li>';
 						}
@@ -129,8 +132,10 @@ class Vibe_BP_Woo_Settings{
 					echo '</select></label>';
 					echo '<select rel-name="'.$setting['name'].'[bpfield][]">';
 					
-					foreach($bp_fields as $f){
-						echo '<option value="'.$f->id.'">'.$f->name.'</option>';
+					if( !empty($bp_fields) ){
+						foreach($bp_fields as $f){
+							echo '<option value="'.$f->id.'">'.$f->name.'</option>';
+						}
 					}
 					echo '</select>';
 					echo '<span class="dashicons dashicons-no remove_field_map"></span></li>';
