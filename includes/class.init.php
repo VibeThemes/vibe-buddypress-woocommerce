@@ -31,6 +31,7 @@ class Vibe_BP_Woo_Init{
         //Sync Woocommerce account with buddypress profile when woo account is updated
         add_action('personal_options_update',array($this,'woo_account_sync_with_bp_xprofile'),999);
         add_action('edit_user_profile_update',array($this,'woo_account_sync_with_bp_xprofile'),999);
+        add_action('woocommerce_checkout_update_user_meta',array($this,'woo_account_sync_with_bp_xprofile'),999);
     }
 
     function enqueue_admin_scripts($hook){
