@@ -65,16 +65,37 @@ class Vibe_BP_Woo_Settings{
 					$bp_fields = $wpdb->get_results("SELECT DISTINCT name,id FROM {$table}");
 
 					$woo_fields = array(
-						'first_name' => __('First Name','vbc'),
-						'last_name' => __('Last Name','vbc'),
-						'country' => __('Country','vbc'),
-						'address' => __('Address','vbc'),
-						'city' => __('Town / City','vbc'),
-						'state' => __('State / Country','vbc'),
-						'zip' => __('Postcode / Zip','vbc'),
-						'phone' => __('Phone','vbc'),
-						'email' => __('Email address','vbc'),
-
+							'first_name' => __('First Name','vbc'),
+							'last_name' => __('Last Name','vbc'),
+							'email' => __('Email address','vbc'),
+							'billing' => array( 
+									'label' => __('Billing','vbc'),
+									'billing_first_name' => __('First Name','vbc'),
+									'billing_last_name' => __('Last Name','vbc'),
+									'billing_email' => __('Email address','vbc'),
+									'billing_company' => __('Company','vbc'),
+									'billing_phone' => __('Phone','vbc'),
+									'billing_address_1' => __('Address 1','vbc'),
+									'billing_address_2' => __('Address 2','vbc'),
+									'billing_city' => __('Town / City','vbc'),
+									'billing_postcode' => __('Postcode / Zip','vbc'),
+									'billing_state' => __('State / Country','vbc'),
+									'billing_country' => __('Country','vbc'),
+								),
+							'shipping' => array(
+									'label' => __('Shipping','vbc'),
+									'shipping_first_name' => __('First Name','vbc'),
+									'shipping_last_name' => __('Last Name','vbc'),
+									'shipping_email' => __('Email address','vbc'),
+									'shipping_company' => __('Company','vbc'),
+									'shipping_phone' => __('Phone','vbc'),
+									'shipping_address_1' => __('Address 1','vbc'),
+									'shipping_address_2' => __('Address 2','vbc'),
+									'shipping_city' => __('Town / City','vbc'),
+									'shipping_postcode' => __('Postcode / Zip','vbc'),
+									'shipping_state' => __('State / Country','vbc'),
+									'shipping_country' => __('Country','vbc'),
+								),
 						);
 
 					echo '<ul class="woo_bp_fields">';
@@ -82,7 +103,15 @@ class Vibe_BP_Woo_Settings{
 						foreach($woo_bp_sync_settings[$setting['name']]['woofield'] as $key => $field){
 							echo '<li><label><select name="'.$setting['name'].'[woofield][]">';
 							foreach($woo_fields as $k=>$v){
-								echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v.'</option>';
+								if( is_array($v) ){
+									echo '<optgroup label="'.$v['label'].'">';
+									foreach ($v as $i => $j) {
+										echo '<option value="'.$i.'" '.(($field == $i)?'selected=selected':'').'>'.$j.'</option>';
+									}
+									echo '</optgroup>';
+								}else{
+									echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v.'</option>';
+								}
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
 							foreach($bp_fields as $f){
@@ -94,7 +123,15 @@ class Vibe_BP_Woo_Settings{
 					echo '<li class="hide">';
 					echo '<label><select rel-name="'.$setting['name'].'[woofield][]">';
 					foreach($woo_fields as $k=>$v){
-						echo '<option value="'.$k.'">'.$v.'</option>';
+						if( is_array($v) ){
+							echo '<optgroup label="'.$v['label'].'">';
+							foreach ($v as $i => $j) {
+								echo '<option value="'.$i.'">'.$j.'</option>';
+							}
+							echo '</optgroup>';
+						}else{
+							echo '<option value="'.$k.'">'.$v.'</option>';
+						}
 					}
 					echo '</select></label>';
 					echo '<select rel-name="'.$setting['name'].'[bpfield][]">';
