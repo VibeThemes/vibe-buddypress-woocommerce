@@ -65,8 +65,6 @@ class Vibe_BP_Woo_Settings{
 					$bp_fields = $wpdb->get_results("SELECT DISTINCT name,id FROM {$table}");
 
 					$woo_fields = array(
-							'first_name' => __('First Name','vbc'),
-							'last_name' => __('Last Name','vbc'),
 							'billing' => array( 
 									'label' => __('Billing','vbc'),
 									'billing_first_name' => __('First Name','vbc'),
@@ -107,8 +105,6 @@ class Vibe_BP_Woo_Settings{
 										echo '<option value="'.$i.'" '.(($field == $i)?'selected=selected':'').'>'.$j.'</option>';
 									}
 									echo '</optgroup>';
-								}else{
-									echo '<option value="'.$k.'" '.(($field == $k)?'selected=selected':'').'>'.$v.'</option>';
 								}
 							}
 							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
@@ -128,8 +124,6 @@ class Vibe_BP_Woo_Settings{
 								echo '<option value="'.$i.'">'.$j.'</option>';
 							}
 							echo '</optgroup>';
-						}else{
-							echo '<option value="'.$k.'">'.$v.'</option>';
 						}
 					}
 					echo '</select></label>';
