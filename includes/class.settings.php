@@ -67,7 +67,6 @@ class Vibe_BP_Woo_Settings{
 					$woo_fields = array(
 							'first_name' => __('First Name','vbc'),
 							'last_name' => __('Last Name','vbc'),
-							'email' => __('Email address','vbc'),
 							'billing' => array( 
 									'label' => __('Billing','vbc'),
 									'billing_first_name' => __('First Name','vbc'),
@@ -86,9 +85,7 @@ class Vibe_BP_Woo_Settings{
 									'label' => __('Shipping','vbc'),
 									'shipping_first_name' => __('First Name','vbc'),
 									'shipping_last_name' => __('Last Name','vbc'),
-									'shipping_email' => __('Email address','vbc'),
 									'shipping_company' => __('Company','vbc'),
-									'shipping_phone' => __('Phone','vbc'),
 									'shipping_address_1' => __('Address 1','vbc'),
 									'shipping_address_2' => __('Address 2','vbc'),
 									'shipping_city' => __('Town / City','vbc'),
