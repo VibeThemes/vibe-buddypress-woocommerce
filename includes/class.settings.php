@@ -51,7 +51,7 @@ class Vibe_BP_Woo_Settings{
     	$woo_bp_sync_settings = get_option('vibe_bp_woo_sync_settings');
 		echo '<form method="post">
 				<table class="form-table">';
-		wp_nonce_field('save_settings','_wpnonce');   
+		wp_nonce_field('save_settings','_wpnonce');
 		echo '<ul class="save-settings">';
 
 		foreach($settings as $setting ){
@@ -62,10 +62,10 @@ class Vibe_BP_Woo_Settings{
 					echo '<td class="forminp"><a class="add_new_map button">'.__('Add BuddyPress profile field map with WooCommerce profile fields','vbc').'</a>';
 
 					global $wpdb,$bp;
-					$table =  $bp->profile->table_name_fields;
-					$bp_fields = $wpdb->get_results("SELECT DISTINCT name,id FROM {$table}");
-
-					$woo_fields = array(
+					$table 		=  $bp->profile->table_name_fields;
+					$bp_fields  = $wpdb->get_results("SELECT DISTINCT name,id FROM {$table}");
+					$bp_fields  = apply_filters('vibe_woo_bp_sync_fields',$bp_fields);
+					$woo_fields = apply_filters('vibe_bp_woo_sync_fields',array(
 							'billing' => array( 
 									'label' => __('Billing','vbc'),
 									'billing_first_name' => __('First Name','vbc'),
@@ -92,7 +92,7 @@ class Vibe_BP_Woo_Settings{
 									'shipping_state' => __('State','vbc'),
 									'shipping_country' => __('Country','vbc'),
 								),
-						);
+						));
 
 					echo '<ul class="woo_bp_fields">';
 					if( is_array($woo_bp_sync_settings[$setting['name']]) && count($woo_bp_sync_settings[$setting['name']]) ){
