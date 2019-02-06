@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Vibe BuddyPress WooCommerce
-Plugin URI: http://www.VibeThemes.com
+Plugin URI: http://www.wplms.io
 Description: Synchronise BuddyPress xProfile fields and WooCommerce checkout fields.
 Version: 1.0
 Requires at least: WP 3.8, BuddyPress 1.9 
-Tested up to: 4.8
+Tested up to: 5.0.3
 License: GPL v 2
-Author: Mr.Vibe 
+Author: VibeThemes
 Author URI: http://www.VibeThemes.com
 Text Domain: vbc
 Domain Path: /languages/
