@@ -1,5 +1,5 @@
 === VIBE BUDDYPRESS WOOCOMMERCE ===
-Contributors: hklatiyan, vibethemes
+Contributors: vibethemes
 Tags: buddypress woocommerce sync, bp2wc, wc2bp, woosyncbp, bpsyncwoo,bpwoosync
 Requires at least: 3.6
 Tested up to: 4.8
