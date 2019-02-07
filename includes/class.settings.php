@@ -162,10 +162,28 @@ class Vibe_BP_Woo_Settings{
 		    _e('Security check Failed. Contact Administrator.','vbc');
 		    die();
 		}
+
 		unset($_POST['_wpnonce']);
 		unset($_POST['_wp_http_referer']);
 		unset($_POST['save_settings']);
-		update_option('vibe_bp_woo_sync_settings',$_POST);
+		if(!empty($_POST) && !empty($_POST['bp_woo_fields_map'])){
+			$sanitized_post = array();
+			$sanitized_post = $this->recursive_sanitizer('sanitize_text_field',$_POST);
+
+			update_option('vibe_bp_woo_sync_settings',$sanitized_post);
+		}
+	}
+
+	function recursive_sanitizer($function,$array){
+
+	    $new_array = array();
+
+	    foreach( $array as $key => $value )
+	    {
+	        $new_array[ $key ] = ( is_array( $value ) ? $this->recursive_sanitizer( $function, $value ) : ( is_array($function) ? call_user_func_array($function, $value) : $function( $value ) ) );
+	    }
+
+	    return $new_array;
 	}
 
 }
