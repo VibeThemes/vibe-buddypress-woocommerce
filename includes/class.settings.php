@@ -59,7 +59,8 @@ class Vibe_BP_Woo_Settings{
 			switch($setting['type']){
 				case 'bp_woo_map':
 					echo '<th scope="row" class="titledesc">'.$setting['label'].'</th>';
-					echo '<td class="forminp"><a class="add_new_map button">'.__('Add BuddyPress profile field map with WooCommerce profile fields','vbc').'</a>';
+					echo '<td class="forminp"><a class="add_new_map button">'.__('Add BuddyPress profile field map with WooCommerce profile fields','vbc').'</a>
+					';
 
 					global $wpdb,$bp;
 					$table 		=  $bp->profile->table_name_fields;
@@ -94,10 +95,11 @@ class Vibe_BP_Woo_Settings{
 								),
 						));
 
-					echo '<ul class="woo_bp_fields">';
+					echo '<ul class="woo_bp_fields">
+					<li><strong>'.__('WooCommerce field','vbc').'</strong><strong>'.__('BuddyPress xProfile Field','vbc').'</strong><span></span></li>';
 					if( is_array($woo_bp_sync_settings[$setting['name']]) && count($woo_bp_sync_settings[$setting['name']]) ){
 						foreach($woo_bp_sync_settings[$setting['name']]['woofield'] as $key => $field){
-							echo '<li><label><select name="'.$setting['name'].'[woofield][]">';
+							echo '<li><select name="'.$setting['name'].'[woofield][]">';
 							foreach($woo_fields as $k=>$v){
 								if( is_array($v) ){
 									echo '<optgroup label="'.$v['label'].'">';
@@ -108,7 +110,7 @@ class Vibe_BP_Woo_Settings{
 									echo '</optgroup>';
 								}
 							}
-							echo '</select></label><select name="'.$setting['name'].'[bpfield][]">';
+							echo '</select><select name="'.$setting['name'].'[bpfield][]">';
 							if( !empty($bp_fields) ){
 								foreach($bp_fields as $f){
 									echo '<option value="'.$f->id.'" '.(($woo_bp_sync_settings[$setting['name']]['bpfield'][$key] == $f->id)?'selected=selected':'').'>'.$f->name.'</option>';
@@ -118,7 +120,7 @@ class Vibe_BP_Woo_Settings{
 						}
 					}
 					echo '<li class="hide">';
-					echo '<label><select rel-name="'.$setting['name'].'[woofield][]">';
+					echo '<select rel-name="'.$setting['name'].'[woofield][]">';
 					foreach($woo_fields as $k=>$v){
 						if( is_array($v) ){
 							echo '<optgroup label="'.$v['label'].'">';
@@ -129,7 +131,7 @@ class Vibe_BP_Woo_Settings{
 							echo '</optgroup>';
 						}
 					}
-					echo '</select></label>';
+					echo '</select>';
 					echo '<select rel-name="'.$setting['name'].'[bpfield][]">';
 					
 					if( !empty($bp_fields) ){
@@ -152,7 +154,7 @@ class Vibe_BP_Woo_Settings{
 			echo '</tr>';
 		}
 		echo '</tbody>
-		</table>';
+		</table><style>ul.woo_bp_fields li { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr));justify-items:flex-start; grid-gap: 10px;align-items:center; } ul.woo_bp_fields li select { width: 100%; }.remove_field_map{color:red;}</style>';
 		echo '<input type="submit" name="save_settings" value="'.__('Save Settings','vbc').'" class="button button-primary" /></form>';
 	}
 
