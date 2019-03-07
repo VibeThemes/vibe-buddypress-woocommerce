@@ -154,7 +154,7 @@ class Vibe_BP_Woo_Settings{
 			echo '</tr>';
 		}
 		echo '</tbody>
-		</table><style>ul.woo_bp_fields li { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr));justify-items:flex-start; grid-gap: 10px;align-items:center; } ul.woo_bp_fields li select { width: 100%; }.remove_field_map{color:red;}</style>';
+		</table><style>ul.woo_bp_fields li { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr));justify-items:flex-start; grid-gap: 10px;align-items:center; } ul.woo_bp_fields li select { width: 100%; }.remove_field_map{color:red;}.hide{display:none !important;}</style>';
 		echo '<input type="submit" name="save_settings" value="'.__('Save Settings','vbc').'" class="button button-primary" /></form>';
 	}
 

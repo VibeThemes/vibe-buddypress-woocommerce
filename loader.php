@@ -18,6 +18,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 include_once('includes/class.init.php');
 include_once('includes/class.settings.php');
+include_once('includes/class.profile.php');
 
 add_action('plugins_loaded','vibe_buddypress_woocommerce_translations');
 function vibe_buddypress_woocommerce_translations(){
