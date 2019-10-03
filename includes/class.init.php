@@ -29,11 +29,11 @@ class Vibe_BP_Woo_Init{
         add_action('bp_core_signup_user',array($this,'bp_xprofile_sync_with_woo_account'),999);
         add_action('bp_core_activated_user',array($this,'bp_xprofile_sync_with_woo_account'),999);
 
-        //add_action('xprofile_profile_field_data_updated',array($this,'bp_field_udpated_check_woo_connect'),10,2);
         //Sync Woocommerce account with buddypress profile when woo account is updated
         add_action('personal_options_update',array($this,'woo_account_sync_with_bp_xprofile'),999);
         add_action('edit_user_profile_update',array($this,'woo_account_sync_with_bp_xprofile'),999);
         add_action('woocommerce_checkout_update_user_meta',array($this,'woo_account_sync_with_bp_xprofile'),999);
+        add_action( 'woocommerce_customer_save_address', array($this,'woo_account_sync_with_bp_xprofile'),999);
     }
 
     function enqueue_admin_scripts($hook){
@@ -43,18 +43,7 @@ class Vibe_BP_Woo_Init{
     	wp_enqueue_style( 'vibe_bp_woo_admin_style', plugin_dir_url( __FILE__ ) . '../assets/css/admin.css' );
     	wp_enqueue_script( 'vibe_bp_woo_admin_style', plugin_dir_url( __FILE__ ) . '../assets/js/admin.js',array('jquery'),'1.0',true);
 	}
-
-    function bp_field_udpated_check_woo_connect($field_id,$value){
-        
-        $woo_bp_sync_settings = get_option('vibe_bp_woo_sync_settings');
-        $user_id = bp_displayed_user_id();
-        print_r($woo_bp_sync_settings);
-
-
-        print_r('####-----');
-        print_r($field_id);print_r($value);
-
-    }
+    
     function bp_xprofile_sync_with_woo_account( $user_id ){
 
         if( empty($user_id) ){
