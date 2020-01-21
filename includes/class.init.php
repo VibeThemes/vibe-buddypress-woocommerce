@@ -65,7 +65,6 @@ class Vibe_BP_Woo_Init{
         }
 
     }
-
     function woo_account_sync_with_bp_xprofile( $user_id ){
         if( empty($user_id) ){
             $user_id = get_current_user_id();
@@ -82,6 +81,16 @@ class Vibe_BP_Woo_Init{
 
                 $field_id = $woo_bp_sync_settings['bp_woo_fields_map']['bpfield'][$key];
                 $data = get_user_meta( $user_id, $value, true );
+                if(strlen($data) === 2){
+                    if(!empty(WC()->countries->countries[$data])){
+                        $this->country_code = $data;
+                        $data = WC()->countries->countries[$data];
+                    }
+
+                    if(!empty(WC()->countries->states[$this->country_code][$data])){
+                        $data = WC()->countries->states[ $this->country_code ][ $data ];
+                    }
+                }
                 xprofile_set_field_data( $field_id, $user_id, $data );
 
             }
