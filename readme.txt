@@ -2,8 +2,8 @@
 Contributors: vibethemes
 Tags: buddypress woocommerce sync, bp2wc, wc2bp, woosyncbp, bpsyncwoo,bpwoosync
 Requires at least: 3.6
-Tested up to: 5.0.3
-Stable tag: 1.0
+Tested up to: 5.3.2
+Stable tag: 1.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,7 @@ Tutorial On how to setup and get started : <a href="https://wplms.io/support/kno
 
 = More Information =
 
-Visit the <a href="https://wplms.io/">WPLMS WordPress LMS</a> for documentation, support, and information on getting involved in the project.
+Visit the <a href="https://wplms.io/">WPLMS Education WordPress LMS</a> for documentation, support, and information on getting involved in the project.
 
 == Installation ==
 
