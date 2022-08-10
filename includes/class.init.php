@@ -34,6 +34,9 @@ class Vibe_BP_Woo_Init{
         add_action('edit_user_profile_update',array($this,'woo_account_sync_with_bp_xprofile'),999);
         add_action('woocommerce_checkout_update_user_meta',array($this,'woo_account_sync_with_bp_xprofile'),999);
         add_action( 'woocommerce_customer_save_address', array($this,'woo_account_sync_with_bp_xprofile'),999);
+
+        add_action('woocommerce_thankyou',array($this, 'check_fields_on_checkout'), 10, 1);
+
     }
 
     function enqueue_admin_scripts($hook){
@@ -97,6 +100,14 @@ class Vibe_BP_Woo_Init{
                 xprofile_set_field_data( $field_id, $user_id, $data );
 
             }
+        }
+    }
+
+    function check_fields_on_checkout( $order_id ) {
+        $order = wc_get_order($order_id);
+        $user_id = $order->get_user_id();
+        if(!empty($user_id)){
+            $this->woo_account_sync_with_bp_xprofile($user_id);
         }
     }
 }

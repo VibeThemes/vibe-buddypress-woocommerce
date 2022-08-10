@@ -97,7 +97,7 @@ class Vibe_BP_Woo_Settings{
 
 					echo '<ul class="woo_bp_fields">
 					<li><strong>'.__('WooCommerce field','vbc').'</strong><strong>'.__('BuddyPress xProfile Field','vbc').'</strong><span></span></li>';
-					if( is_array($woo_bp_sync_settings[$setting['name']]) && count($woo_bp_sync_settings[$setting['name']]) ){
+					if(!empty($woo_bp_sync_settings[$setting['name']]) && is_array($woo_bp_sync_settings[$setting['name']]) && count($woo_bp_sync_settings[$setting['name']]) ){
 						foreach($woo_bp_sync_settings[$setting['name']]['woofield'] as $key => $field){
 							echo '<li><select name="'.$setting['name'].'[woofield][]">';
 							foreach($woo_fields as $k=>$v){
